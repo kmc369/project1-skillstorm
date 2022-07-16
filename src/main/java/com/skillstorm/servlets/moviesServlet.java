@@ -17,6 +17,9 @@ import com.skillstorm.Dao.movie_Dao_imple;
 import com.skillstorm.movies.movies;
 import com.skillstorm.services.urlParserService;
 
+
+
+
 @WebServlet(urlPatterns = "/movies/*")
 public class moviesServlet extends HttpServlet {
 
@@ -26,24 +29,46 @@ public class moviesServlet extends HttpServlet {
 	ObjectMapper mapper = new ObjectMapper();
 	urlParserService url = new urlParserService();
 	
+	
+	
+	//FINDING DONE DONT TOUCH IT 
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		
-		List<movies> movies = dao.findAll();
-		//System.out.println(movies);
-		
-		if(movies != null) {
-			resp.setContentType("application/json");
-			resp.getWriter().print(mapper.writeValueAsString(movies));
+		try {
+			int id = url.extractId(req.getPathInfo());
 			
-		}else {
+			movies movie = dao.findById(id);
+			if (movie != null) {
+				resp.setContentType("application/json");
+				resp.getWriter().print(mapper.writeValueAsString(movie));
+			} else {
+			
+				List<movies> movies = dao.findAll();
+				
+				resp.setContentType("application/json");
+				resp.getWriter().print(mapper.writeValueAsString(movies));
+				
+			}
+		} catch (Exception e) {
 			resp.setStatus(404);
+			
 		}
 		
 		
-		}
+		
+		
+		
+		
+		
+		
+
+		
+	}
 	
+	//INSERTING Post Complete Done dont touch this !
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -62,44 +87,55 @@ public class moviesServlet extends HttpServlet {
 	}
 		
 	
+	//DELETING 
 	
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		
 		try {
-		int id = url.extractId(req.getPathInfo());
-		movies movie = dao.findById(id);
+			
+			int id = url.extractId(req.getPathInfo());
+			dao.delete(id);
+
+			
+
 		
-		if(movie != null) {
+		}catch (Exception e) {
+			
+			List<movies> movie = dao.findAll();
+			
 			resp.setContentType("application/json");
 			resp.getWriter().print(mapper.writeValueAsString(movie));
-		}else {
-			resp.setStatus(404);
-			System.out.println("No artist found try anothe Id");
+			
 		}
-		
-		resp.setContentType("application/json");
-		resp.getWriter().print(mapper.writeValueAsString(movie));
-		
-	
-	
-		}catch(Exception e){
-			List<movies> movies = dao.findAll();
-			System.out.println(movies);
-			resp.setContentType("application/json");
-			resp.getWriter().print(mapper.writeValueAsString(movies));
-		}
+
 		
 	}
 	
+	
+	//UPDATING its done BUT !! //if the Id isnt in the database then what
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		try {
 		
 		InputStream reqbody = req.getInputStream();
 		movies updatedMovie = mapper.readValue(reqbody,movies.class);
 		
 		dao.remakeYear(updatedMovie);
+		
+	
+		
+		}catch(Exception e) {
+			
+			List<movies> movies = dao.findAll();
+			resp.setContentType("application/json");
+			resp.getWriter().print(mapper.writeValueAsString(movies));
+			
+			
+		}
+		
 	}
 	
 
