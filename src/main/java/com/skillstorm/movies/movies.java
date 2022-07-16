@@ -34,7 +34,13 @@ public class movies {
 		Year = year;
 	}
 
-
+	public movies(String title, String actor, String genre,int year,int id) {
+		this.title=title;
+		this.Actor=actor;
+		this.Genre=genre;
+		this.Year=year;
+		this.id=id;
+	}
 
 
 

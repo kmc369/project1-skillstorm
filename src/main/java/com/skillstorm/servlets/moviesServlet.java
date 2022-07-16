@@ -96,6 +96,10 @@ public class moviesServlet extends HttpServlet {
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		InputStream reqbody = req.getInputStream();
+		movies updatedMovie = mapper.readValue(reqbody,movies.class);
+		
+		dao.remakeYear(updatedMovie);
 	}
 	
 

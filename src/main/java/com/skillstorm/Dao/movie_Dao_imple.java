@@ -168,6 +168,26 @@ public class movie_Dao_imple implements movieDao {
 	@Override
 	public void remakeYear(movies movie) {
 		
+		String sql = "UPDATE movie_list SET  movie_Title = ?, lead_actor = ?, movie_genre = ? ,movie_Year = ? Where movie_id = ?";
+	
+		try (Connection conn  = moviesDbCred.getInstance().getConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, movie.getTitle());
+			ps.setString(2, movie.getActor());
+			ps.setString(3, movie.getGenre());
+			ps.setInt(4, movie.getYear());
+			ps.setInt(5, movie.getId());
+		
+		
+			int rowsAffected = ps.executeUpdate(); //if 0 none of the rows were updated 
+			
+			
+		
+		
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 		
 	}
 
