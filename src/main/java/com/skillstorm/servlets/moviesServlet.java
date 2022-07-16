@@ -22,6 +22,10 @@ import com.skillstorm.services.urlParserService;
 
 @WebServlet(urlPatterns = "/movies/*")
 public class moviesServlet extends HttpServlet {
+	
+	
+
+	
 
 	private static final long serialVersionUID = 1L;
 	
@@ -53,6 +57,8 @@ public class moviesServlet extends HttpServlet {
 				
 			}
 		} catch (Exception e) {
+			
+	
 			resp.setStatus(404);
 			
 		}
