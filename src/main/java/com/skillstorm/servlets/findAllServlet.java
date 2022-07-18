@@ -1,7 +1,8 @@
-/*package com.skillstorm.servlets;
+package com.skillstorm.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,46 +11,40 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.skillstorm.models.movies;
+import com.skillstorm.Dao.movieDao;
+import com.skillstorm.Dao.movie_Dao_imple;
+import com.skillstorm.movies.movies;
+import com.skillstorm.services.urlParserService;
 
 
-
-	
+//dont touch this 
 @WebServlet(urlPatterns = "/findAll")
 
 public class findAllServlet extends HttpServlet {
 
 		private static final long serialVersionUID = 1L;
+		
+
+		movieDao dao = new movie_Dao_imple();
+		ObjectMapper mapper = new ObjectMapper();
+		urlParserService url = new urlParserService();
 
 		@Override
 		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 			
-			System.out.println("hello servlet");
-			resp.setStatus(200);
+			
+			List<movies> movie = dao.findAll();
+			System.out.println(movie);
+			resp.setContentType("application/json");
+			resp.getWriter().print(mapper.writeValueAsString(movie));
+			
 		
 			
 	}
 		
-		@Override
-		protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			
-			System.out.println("Post Servlet ");
-		
-			//take in an json and conver it into an object 
-			ObjectMapper mapper = new ObjectMapper();
-			
-			InputStream reqBody = req.getInputStream();
-			movies movie = mapper.readValue(reqBody, movies.class); //take in the json request and turn it into an object
-			
-			
-			resp.setContentType("application/json");
-			//send an object as json 
-			resp.getWriter().print(mapper.writeValueAsString(movie));
-			
-			System.out.println(movie);
-		}
+
 }
 	
 	
-	*/
+
 
